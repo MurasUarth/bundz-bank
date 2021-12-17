@@ -26,7 +26,7 @@ class OperationsProcessor {
 
   deposit(account, quantity) {
     if(account == -1) {
-      console.log('Invalid account.')
+      console.log('Invalid account!!');
       return;
     }
     console.log(this.accounts[account]);
