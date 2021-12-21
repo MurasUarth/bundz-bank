@@ -1,9 +1,10 @@
 const sleep = require('../utils/sleep');
 
 class OperationsProcessor {
-  constructor(queue, accounts) {
+  constructor(queue, accounts, historic) {
     this.queue = queue;
     this.accounts = accounts;
+    this.historic = [];
   }
 
   async start(interval=1000) {
@@ -74,7 +75,14 @@ class OperationsProcessor {
     console.log('Not enought balance.');
     return;
   }
-    
+  
+  historicOperation(account, operation) {
+    if(account == -1) {
+      console.log("Invalid account.");
+    }
+    this.historic.push(operation);
+  }
+
   processOperations(operations) {
     for(const operation of operations) {
       if(operation.type == 'DEPOSIT') {
@@ -94,6 +102,12 @@ class OperationsProcessor {
         const from = this.getAccount(operation.from);
         const to = this.getAccount(operation.to);
         this.transfer(from, to, operation.quantity)
+      }
+      if(operation.type == 'HISTORIC') {
+        console.log(operation.type);
+        const account = this.getAccount(operation);
+        this.historicOperation(account, operation);
+        console.log(this.historic);
       }
     }
   }
